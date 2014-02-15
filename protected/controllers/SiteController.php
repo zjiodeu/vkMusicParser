@@ -62,6 +62,7 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
             if (!isset($_POST) || !isset($_POST['songs']))
                 return false;
             $songs = json_decode($_POST['songs'], 1);
+            //die(var_dump($songs));
             $folder = new Folder();
             return $folder->saveMusic($songs);
         }
@@ -69,7 +70,7 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
         // return vk page content
         private function parseUrl($url) {
             $sid = $this->RemixSid();
-            $command = 'phantomjs /home/zjiodeu/public_html/www/vkmusic/js/phantom.vk.js' . " $sid $url";
+            $command = 'phantomjs '.$_SERVER['DOCUMENT_ROOT'].'/js/phantom.vk.js' . " $sid $url";
             $response = shell_exec($command);
             return $response;
         }
@@ -78,7 +79,7 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
             $data = array(); //data format is one singer to a lot of [song , download link ,enabled (it will be downloaded)]
             $struct = array(); // contains array of Singer objects
             if (!is_array($arr)) {
-                return $arr;
+                throw new CHttpException(400 ,'error when serialize');
             }
 
            self::$songsCount = count($arr[1]);
@@ -103,7 +104,8 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
                     $struct[$name]->music = array_merge($struct[$name]->music,$items);
                     continue;
                }
-               $obj = new Singer($name);
+               $obj = new stdClass();
+               $obj->name = $name;
                $obj->music = $items;
                $obj->enabled = true;
                $struct[$name] = $obj;

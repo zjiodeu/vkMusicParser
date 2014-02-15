@@ -21,7 +21,7 @@ page.settings = {
 page.open(phantom.args[1], function() {
     var tries = 0,
     t = setInterval(function() {
-        page.scrollPosition = { top: page.scrollPosition.top + 30000, left: 0 };
+        page.scrollPosition = { top: page.scrollPosition.top + screen.height, left: 0 };
         ++tries;
             if (tries === 40) {            
                 console.log(page.content);
