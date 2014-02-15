@@ -44,7 +44,7 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
                         break;
                     }
                     default: {
-                        throw new CHttpException(404,'неверный тип загружаемых данных');
+                        throw new CHttpException(400,'неверный тип загружаемых данных');
                         break;
                     }
                 }
@@ -69,7 +69,9 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
         
         // return vk page content
         private function parseUrl($url) {
+            // get remixsid value
             $sid = $this->RemixSid();
+            // get scrolled page
             $command = 'phantomjs '.$_SERVER['DOCUMENT_ROOT'].'/js/phantom.vk.js' . " $sid $url";
             $response = shell_exec($command);
             return $response;
@@ -115,7 +117,7 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
         
         private function RemixSid() {
             if (isset($_COOKIE['remixsid']) && !empty($_COOKIE['remixsid'])) {
-                $sid = trim(strip_tags($_COOKIE['remixsid']));
+                $sid = trim($_COOKIE['remixsid']);
                 return $sid;
             }
             else
