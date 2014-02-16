@@ -2,6 +2,11 @@ $(function(){
     /*
      * SONGS - contains serialized VK songs
      */
+       
+ // enable or disable or singers in list
+ var active = true,
+     checkboxes = $('#mydialog').find('input[type="checkbox"]');
+     
     $('input[type="checkbox"]').on('click',function() {
         var called = $(this).attr('name'),
             info = {};            
@@ -18,13 +23,30 @@ $(function(){
        info.song = getSongInfo.call($(this)); 
        info.singer = getSingerInfo.call($(this));
 
-       switchStatus.call($(this),info);
+       switchStatus(info);
     });
 
     $('#saveMusic').on('click', function(){
         $.post('/index.php?r=site/accept',{"songs":JSON.stringify(SONGS)});
         $('#mydialog').dialog('close');
     });
+    
+
+     
+$('#switchAll').on('click', function() {
+    debugger;
+    if (active) {
+        checkboxes.removeAttr('checked');
+    }
+    else {
+        checkboxes.attr('checked', 'checked');
+    }
+   active = !active;
+   for (var singer in SONGS) {
+       SONGS[singer].enabled = active;
+   }
+});  
+    
 });
 
 
@@ -76,15 +98,18 @@ $(function(){
 
  
  function switchStatus(info) {
+     debugger;
      var music;
      if (SONGS.hasOwnProperty(info.singer)) {
          music = SONGS[info.singer].music;
          for (var i in music) {
              if (music[i].song === info.song)
                  music[i].enabled = !music[i].enabled;
+                 break;
          }
      }
  }
+
     
 
 

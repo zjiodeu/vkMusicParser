@@ -401,3 +401,8 @@ color: rgb(90, 155, 238);
   margin:0 auto;
 }
 
+a.optlink {
+    float: right;
+    color: #09f !important;
+    font-size: 10px;
+}

@@ -34,7 +34,7 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
     ),
      
 ));
-    $html = '';
+    $html = '<a href="javascript:void(0)" id="switchAll" class="optlink" >Выбрать/отменить всё</a>';
     foreach ($songs as $singer => $obj):
         $html .= '<div class="block"><p class="singer">'.CHtml::checkbox('chsinger',true)
                     .'<a href="#"><b>'.$singer.'</b></a></p>';
