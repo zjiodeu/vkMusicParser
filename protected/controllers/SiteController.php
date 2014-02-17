@@ -6,6 +6,8 @@ class SiteController extends Controller
 	 * Declares class-based actions.
 	 */
          private static $songsCount = 0;
+         
+         const AUDIO = 'http://vk.com/audio';
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
@@ -35,12 +37,8 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
                         $data = $this->parseUrl($_POST['target']);
                         break;
                     }
-                    case 'file': {
-                        if ($_FILES && $_FILES['target']) {
-                            $file = $_FILES['target']['tmp_name'];
-                            if (!empty($file))
-                                $data = file_get_contents($file);
-                        }                           
+                    case 'search': {
+                        $data = $this->parseUrl(self::AUDIO, urlencode($_POST['query']));                     
                         break;
                     }
                     default: {
@@ -68,11 +66,14 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
         }
         
         // return vk page content
-        private function parseUrl($url) {
+        private function parseUrl() {
+            $args = func_get_args();
+            if (empty($args))
+                throw new CHttpException(400, 'parseUrl got no arguments...');
             // get remixsid value
             $sid = $this->RemixSid();
             // get scrolled page
-            $command = 'phantomjs '.$_SERVER['DOCUMENT_ROOT'].'/js/phantom.vk.js' . " $sid $url";
+            $command = 'phantomjs '.$_SERVER['DOCUMENT_ROOT'].'/js/phantom.vk.js' . " $sid " . implode(' ', $args);
             $response = shell_exec($command);
             return $response;
         }

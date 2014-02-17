@@ -7,14 +7,8 @@
 );
    ?>
     <br />
-    <div class="type widget" id="byLink">
-            <span>Для работы нужно указать свой remixsid</span>
-        <?php $this->renderPartial('byLink', array('songs' => $songs)); ?>
-    </div>
-    <div class="type widget" id="byFile">
-            <span>Количество песен зависит от загружаемого <i>.html</i> файла</span>
-         <?php $this->renderPartial('byFile', array('songs' => $songs)); ?>
-    </div>
+    <?php $this->widget('downloadType', array('view' => 'byLink')); ?>
+    <?php $this->widget('downloadType', array('view' => 'bySearch')); ?>
         <?php
        //die(print_r($songs));
     if (!empty($songs)): 

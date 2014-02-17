@@ -65,12 +65,11 @@ class Folder extends CFormModel{
     
     
     public static function cleaning($name, $iconv = false) {
-        /*if ($iconv)
-            $name = iconv('windows-1251','utf-8',$str);*/
+        $name = trim(strip_tags($name));
         $name = preg_replace('/[^-a-zа-яё0-9\s\.]/iu','',$name);
         $name = preg_replace('/^the\s/i','',$name);
         $name = mb_strtolower($name,'UTF-8');
-       return trim($name);
+       return $name;
     }
     
     // kostili suka  
