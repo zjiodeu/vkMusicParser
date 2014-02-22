@@ -95,18 +95,17 @@ $audioRegExp = '/<input[\s\S]+?id=["\']audio_info[_0-9]+["\'][\s\S]+?value=[\'"]
                              'enabled' => true);
                $data[$arr[2][$i]][] = $item;
            }
-           /*
-            * class Singer defined in Components
-            */
+
            $options = new XMLOptions();
            foreach ($data as $singer => $items) {
                // try to get real name from XML
                $name = $options->getNameByAlias($singer);
                // if it isset merge array of songs
-               if (isset($struct[$name])) {
+               if ($name && isset($struct[$name])) {
                     $struct[$name]->music = array_merge($struct[$name]->music,$items);
                     continue;
                }
+               $name = $name ? $name : $singer;
                $obj = new stdClass();
                $obj->name = $name;
                $obj->music = $items;

@@ -36,7 +36,7 @@ class XMLOptions extends CFormModel {
     public function save() {
         $file = $this->destination();
         if (!is_file($file)) {
-            file_put_contents($file,'<?xml version= "1.0"?><options></options>');
+            file_put_contents($file,'<?xml version= "1.0" encoding="UTF-8"?><options></options>');
         }
        $xml = simplexml_load_file($file);       
        if (FALSE === ($singer = $this->addSinger($xml)) )
@@ -60,16 +60,16 @@ class XMLOptions extends CFormModel {
     
     public function getNameByAlias($alias) {
         $xml = $this->load();
-        $name = mb_strtolower($alias, 'UTF-8');
+        $alias = trim($alias);
         foreach ($xml->children() as $singer) {
             for ($i=0, $len = count($singer->alias); $i < $len; ++$i) {
-                if ($name == $singer->alias[$i]) {
-                    $name = (string)$singer->attributes()->name;
-                    break 2;
+                if (preg_match($singer->alias[$i], $alias)) {
+                    $alias = (string)$singer->attributes()->name;
+                    return $alias;
                 }
             }
         }
-        return $name;
+        return false;
     }
     
     private function addSinger($xml) {
